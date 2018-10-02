@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="search-bar">
+        <input id="searchMovie" type="text"><a id="activateSearch" href="#">SEARCH</a>
+    </div>
+    <p># of Movies: <span id="totalResults"></span></p>
+    <div id="movies">
+        
+    </div>
+    <script>
+    const searchButton = document.getElementById('activateSearch');
+    const movieBox = document.getElementById('movies');
+
+    let searchWord = document.getElementById('searchMovie').value;
+    let totalResults = document.getElementById('totalResults');
+
+    
+
+    let runSearch = (e) => {
+        e.preventDefault();
+        fetch(`//www.omdbapi.com/?apikey=def802d7&type=movie&plot=short&s=${searchWord}`)
+        .then(res => res.json())
+        .then(movies => {
+            console.log(movies);
+        totalResults.innerText = movies.totalResults;
+        movies.Search.forEach((movie)=>{
+            let {Title, Poster, imdbID} = movie;
+            movieBox.innerHTML += 
+            `
+            <div>
+            <h1>${Title}</h1>
+            <img src="${Poster}" alt="${Title}"/>
+            <a target="_blank" href="https://www.imdb.com/title/${imdbID}">View on IMDB</a>
+            </div>
+            `
+        })
+    })
+    .catch(err => console.log)
+    }
+    
+    searchButton.addEventListener('click', runSearch);
+
+</script>
+</body>
+</html>
